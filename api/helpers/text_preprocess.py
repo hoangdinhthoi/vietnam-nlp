@@ -1,5 +1,6 @@
 import unicodedata as ud
 from api import vocab_bi_gram
+from api import filtered_tags
 import re
 
 
@@ -100,3 +101,53 @@ class PreprocessText:
         sentence = sentence.replace('…', '...')
         sentence = sentence.replace('’', '\'')
         return sentence
+
+
+class FeaturizeTextPosTagger(FeaturizeText):
+    @staticmethod
+    def word2features(sentence, i):
+        word = sentence[i][0]
+        features = {
+            'bias': 1.0,
+            'word.lower()': word.lower(),
+            'word.istitle()': word.istitle(),
+            'word.isdigit()': word.isdigit(),
+            'word[:1].isdigit()': word[:1].isdigit(),
+            'word[:3].isupper()': word[:3].isupper(),
+            'word.isfiltered': word in filtered_tags,
+        }
+        if i > 0:
+            word1 = sentence[i-1][0]
+            features.update({
+                '-1:word.lower()': word1.lower(),
+                '-1:word.istitle()': word1.istitle(),
+                '-1:word[:1].isdigit()': word1[:1].isdigit(),
+                '-1:word[:3].isupper()': word1[:3].isupper(),
+            })
+            if i > 1:
+                word2 = sentence[i-2][0]
+                features.update({
+                    '-2:word.lower()': word2.lower(),
+                    '-2:word.istitle()': word2.istitle(),
+                    '-2:word.isupper()': word2.isupper(),
+                })
+        else:
+            features['BOS'] = True
+        if i < len(sentence) - 1:
+            word1 = sentence[i+1][0]
+            features.update({
+                '+1:word.lower()': word1.lower(),
+                '+1:word.istitle()': word1.istitle(),
+                '+1:word[:1].isdigit()': word1[:1].isdigit(),
+                '+1:word.isupper()': word1.isupper(),
+            })
+            if i < len(sentence) - 2:
+                word2 = sentence[i+2][0]
+                features.update({
+                    '+2:word.lower()': word2.lower(),
+                    '+2:word.istitle()': word2.istitle(),
+                    '+2:word.isupper()': word2.isupper(),
+                })
+        else:
+            features['EOS'] = True
+        return features

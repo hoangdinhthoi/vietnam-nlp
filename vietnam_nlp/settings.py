@@ -30,8 +30,10 @@ def env(key):
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ENV_FILE_PATH = os.path.join(BASE_DIR, '.env')
 load_dotenv(ENV_FILE_PATH)
+
 VOCAB_BI_GRAM = os.path.join(BASE_DIR, env('VOCAB_BI_GRAM'))
 TOKEN_TAGGER_MODEL = os.path.join(BASE_DIR, env('TOKEN_TAGGER_MODEL'))
+POS_TAGGER_MODEL = os.path.join(BASE_DIR, env('POS_TAGGER_MODEL'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
