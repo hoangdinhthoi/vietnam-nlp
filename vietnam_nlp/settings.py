@@ -34,6 +34,7 @@ load_dotenv(ENV_FILE_PATH)
 VOCAB_BI_GRAM = os.path.join(BASE_DIR, env('VOCAB_BI_GRAM'))
 TOKEN_TAGGER_MODEL = os.path.join(BASE_DIR, env('TOKEN_TAGGER_MODEL'))
 POS_TAGGER_MODEL = os.path.join(BASE_DIR, env('POS_TAGGER_MODEL'))
+NER_TAGGER_MODEL = os.path.join(BASE_DIR, env('NER_TAGGER_MODEL'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
